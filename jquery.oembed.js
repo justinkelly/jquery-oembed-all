@@ -318,8 +318,37 @@
               });
               oembedContainer.append('<br/>');
               oembedContainer.append(oembedData.code);
-              if(settings.maxWidth)oembedContainer.css('max-width',settings.maxWidth);
-              if(settings.maxHeight)oembedContainer.css('max-height',settings.maxHeight);
+              //if(settings.maxWidth)oembedContainer.css('max-width',settings.maxWidth);
+              //if(settings.maxHeight)oembedContainer.css('max-height',settings.maxHeight);
+              
+              /* Make videos semi-responsive
+              * If parent div width less than embeded iframe video then iframe gets shrunk to fit smaller width
+              * If parent div width greater thans embed iframe use the max widht
+              * - works on youtubes and vimeo
+              */
+              if(settings.maxWidth){
+                  $post_width =  oembedContainer.parent().width();
+                  if($post_width < settings.maxWidth)
+                  {
+                      $iframe_width_orig = jQuery('iframe',oembedContainer).width();
+                      $iframe_height_orig = jQuery('iframe',oembedContainer).height();
+
+                      $ratio =  $iframe_width_orig / $post_width;
+                      $iframe_width_new = $iframe_width_orig / $ratio;
+                      $iframe_height_new = $iframe_height_orig / $ratio;
+
+                      jQuery('iframe',oembedContainer).width($iframe_width_new);
+                      jQuery('iframe',oembedContainer).height($iframe_height_new);
+                  } else {
+                      if(settings.maxWidth){
+                          jQuery('iframe',oembedContainer).width(settings.maxWidth);
+                      }
+                      if(settings.maxHeight){
+                          jQuery('iframe',oembedContainer).height(setting.maxHeight);
+                      }
+                  }
+              }
+              
               break;
         }
     };
